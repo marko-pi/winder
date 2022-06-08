@@ -1,9 +1,9 @@
 # winder
 Software for a simple motor winding machine
 
-This is a really simple program for a small DC winding machine.  Here is a video explaining the motivation for creating a motor winding machine:
+This is a really simple program for a small DC winding machine.  Here is a video explaining the motivation for creating a motor winding machine  [video](https://youtu.be/0TUpQcnt1OU):
 
-https://youtu.be/0TUpQcnt1OU
+
 
 Some more discussion on the topic
 
