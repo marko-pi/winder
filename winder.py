@@ -12,9 +12,8 @@ mcnt = 0                 # magnet counter
 mtim = time.time()       # time at last magnet event
 butb = time.time()       # time at last both buttons
 buto = time.time()       # time at last one button
-mint = time.time() - 60  # last writing
 
-def mwri(num, pos, siz=1, rev=False):
+def mwri(num, pos, siz=1):
     lst=[]
     mns = False
     if num < 0: mns = True
@@ -27,10 +26,7 @@ def mwri(num, pos, siz=1, rev=False):
     for i in range(siz-len(lst)):
         lst.insert(0,-1)
     for i in range(len(lst)):
-        if rev == False:
-            mypi.spi_xfer(cont, [9-pos-i, mnum[lst[i]]])
-        else:
-            mypi.spi_xfer(cont, [pos+i, (mnum[lst[i]] & 0x0E)*8 + (mnum[lst[i]] & 0x70)//8 + (mnum[lst[i]] & 0x01)])
+        mypi.spi_xfer(cont, [9-pos-i, mnum[lst[i]]])
 
 def magn(gpio, level, tick):
     global mcnt
@@ -40,7 +36,7 @@ def magn(gpio, level, tick):
         mtim = time.time()
         if spd > 0: mcnt = mcnt + 1
         if spd < 0: mcnt = mcnt - 1
-        mwri(mcnt,5,4,True)
+        mwri(mcnt,5,4)
 
 # approximate frequencies: 0, 0.2, 0.3, 0.4, 0.5, 0.58, -0.58, -0.5, -0.4, -0.3, -0.2
 serv = [1500, 1550, 1590, 1660, 1770, 2000, 1000, 1220, 1320, 1380, 1420]
@@ -64,12 +60,10 @@ mypi.set_pull_up_down(pipl, pigpio.PUD_UP)
 mypi.set_pull_up_down(pire, pigpio.PUD_UP)
 
 mypi.set_servo_pulsewidth(pise, serv[0])
-mwri(mcnt,5,4,True)
-mwri(spd,1,2,True)
+mwri(mcnt,5,4)
+mwri(spd,1,2)
 
 mypi.callback(piha, pigpio.RISING_EDGE, magn)
-
-fout = open('data/servo_var.txt', 'w')
 
 try:
     while True:
@@ -87,50 +81,15 @@ try:
             buto = time.time()
         if (mypi.read(pire) == 0):
             mcnt = 0
-            mwri(mcnt,5,4,True)
+            mwri(mcnt,5,4)
     		
         # rotation speed control
         if nspd != spd:
             spd = nspd
             mypi.set_servo_pulsewidth(pise, serv[spd])
-            mwri(spd,1,2,True)
-
-        if time.time() - mint >= 60:
-            mint = mint + 60
-            fout.write('%02d:%02d:%02d %04d\n' % (mint % 86400 // 3600, mint % 3600 // 60, mint % 60, mcnt))
-            fout.flush()
+            mwri(spd,1,2)
 
 except KeyboardInterrupt:
     mypi.set_servo_pulsewidth(pise, serv[0])
     for i in range(2):                # clear screen
         mypi.spi_xfer(cont, [i+1, 0])
-    fout.close()
-
-# keybord management
-#
-#from pynput import keyboard
-#
-#def on_press(key):
-#    global prs
-#    try:
-#        prs=key.char
-#    except AttributeError:
-#        pass
-#
-#prs = ""
-#listener = keyboard.Listener(on_press=on_press)
-#listener.start()
-#
-#    if prs != '':
-#        if prs == '+': nspd = spd + 1
-#        elif prs == '-': nspd = spd - 1
-#        elif prs == '0': nspd = 0
-#        elif prs == 'c': 
-#            rdis = 0
-#            rcnt = 0
-#            rtim = time.time()
-#            mwri(rdis,5,4,True)
-#        elif prs == 'e': break
-#        prs = ''
-#
-#listener.stop()
