@@ -40,7 +40,7 @@ def magn(gpio, level, tick):
 
 # approximate frequencies: 0, 0.2, 0.3, 0.4, 0.5, 0.58, -0.58, -0.5, -0.4, -0.3, -0.2
 serv = [1500, 1550, 1590, 1660, 1770, 2000, 1000, 1220, 1320, 1380, 1420]
-# segments for numbers 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, minus symbol and empty display
+# segments for digits 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, minus symbol and empty display
 mnum=[0x7E,0x30,0x6D,0x79,0x33,0x5B,0x5F,0x70,0x7F,0x7B,0x01,0x00]
 
 mypi=pigpio.pi()
