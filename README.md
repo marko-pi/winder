@@ -4,7 +4,7 @@ This is a really simple program for a small DC winding machine. You can see the 
 
 ## Circuit diagram for the winding machine:
 
-![winder](https://user-images.githubusercontent.com/18025812/172726742-219effce-725a-4143-96c7-33813451a02d.png)
+![winder](https://user-images.githubusercontent.com/18025812/172836431-235539c4-483f-41a5-9025-f2d3fb3eab5d.png)
 
 ## Basic explanation of the program:
 
@@ -14,4 +14,4 @@ The servo motor is controlled by two push buttons, one to increase the speed and
 
 The number of turns is measured with a magnet and a *linear* Hall detector.  When the magnet is far from the sensor, the output voltage is about 1.5 V, and when it is close to the sensor, the voltage increases or decreases significantly, depending on the orientation of the magnet. When the magnet is correctly oriented, the digital GPIO registers the presence of the magnet as a change in state.
 
-The setup uses a MAX7219-controlled 8-digit 7-segment display to indicate the servo motor speed (values from -5 to 5) and the number of turns.  The program already contains all the necessary code for communication with MAX7219.  In particular, the function **mwri(num, pos, siz)** displays the number **num** at the position **pos** with a minimum length of **siz**. The list **mnum** contains the information which segments must be displayed for each digit and minus sign. In principle, MAX7219 is a 5 V device, but 3.3V GPIO pins usually control it without problems.
+The setup uses a MAX7219-controlled 8-digit 7-segment LED display to indicate the servo motor speed (values from -5 to 5) and the number of turns.  The program already contains all the necessary code for communication with MAX7219.  In particular, the function **mwri(num, pos, siz)** displays the number **num** at the position **pos** with a minimum length of **siz**. The list **mnum** contains the information which segments must be displayed for each digit and minus sign. In principle, MAX7219 is a 5 V device, but 3.3V GPIO pins usually control it without problems.
